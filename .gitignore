@@ -1,0 +1,18 @@
+# dependencies
+node_modules/
+npm-debug.log*
+yarn-error.log*
+
+# vercel
+.vercel/
+
+# OS / editor noise
+.DS_Store
+Thumbs.db
+*.swp
+
+# local scratch
+*.local
+
+# rendered PDF build cache
+_pdfpages/
