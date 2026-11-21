@@ -39,7 +39,7 @@
       id: 'song-act-1',
       kind: 'song',
       num: '01',
-      kicker: 'Song · 24 seconds',
+      kicker: 'How I describe you',
       dur: 24,
       audio: '/songs/sec-1.mp3',
       photo: '/songs/photo-1.jpg',
@@ -59,7 +59,7 @@
       id: 'song-act-2',
       kind: 'dialogue',
       num: '02',
-      kicker: 'Dialogue · 11 seconds',
+      kicker: 'A dialogue, delivered perfectly',
       dur: 11,
       audio: '/songs/sec-2.mp3',
       photo: '/songs/photo-2.jpg',
@@ -366,8 +366,9 @@
           var ratio = d / declared;
           if (ratio >= 0.75 && ratio <= 1.25) {
             applyDur(d);
-            var k = el.querySelector('.sec-kicker');
-            if (k) k.textContent = a.kicker.split('·')[0].trim() + ' · ' + roundDur(d) + ' seconds';
+            /* NOTE: the kicker is now a fixed editorial line
+               ("How I describe you"), so we deliberately do NOT rewrite it
+               with the clip length any more. Nothing else depends on it. */
           }
         });
         au.addEventListener('playing', function () {

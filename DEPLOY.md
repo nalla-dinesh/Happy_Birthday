@@ -72,3 +72,92 @@ songs/sec-2.mp3          ← dialogue act (11 s) ✅ installed
 songs/photo-1.jpg        ← act 1 photo  ✅ installed
 songs/photo-2.jpg        ← act 2 photo  ✅ installed
 ```
+
+---
+
+## 🚨 Troubleshooting: site 404 karta hai
+
+Agar deployed URL pe **`404 Not Found`** aata hai (aur `/api/time` phir bhi chalta hai),
+to iska matlab hai: **Vercel ko static files mil hi nahi rahi**.
+
+99% cases me wajah ye 3 hain:
+
+### 1. Zip upload kiya — usme files folder ke andar hain
+Zip ka structure aisa tha:
+```
+birthday-four-clone/
+   index.html
+   _next/
+```
+Vercel ko `index.html` **root** me chahiye:
+```
+index.html
+_next/
+```
+
+✅ **Fix:** `prerana-VERCEL-FLAT.zip` use karo — usme sab files root pe hain.
+
+### 2. Framework galat detect ho gaya
+Agar Vercel ne **Next.js** preset chun liya, to wo `.next` build output dhoondhta hai,
+nahi milta, aur har route 404 ho jata hai. Isi wajah se `/api/time` jaise
+dynamic route chalte hain jabki `index.html` 404 deta hai.
+
+✅ **Fix:** Project Settings → **Framework Preset = `Other`**, aur
+**Build Command / Output Directory / Install Command** — teeno **khali**. Phir Redeploy.
+
+Ab `vercel.json` me `"framework": null` bhi daal diya hai, jo isko enforce karta hai.
+
+### 3. Purana failed deployment serve ho raha hai
+✅ **Fix:** Vercel → Deployments → sabse **latest** deployment → `⋯` → **Promote to Production**.
+
+---
+
+## ✅ Step-by-step jo 100% chalega
+
+### Raasta A — Git se (recommended)
+
+```bash
+# zip extract karo (GitHub wali — folder ke saath)
+cd birthday-four-clone
+rm -rf .git
+git init && git add . && git commit -m "birthday site"
+git branch -M main
+git remote add origin https://github.com/<username>/<repo>.git
+git push -u origin main
+```
+Vercel → **Add New → Project → Import** → repo chuno → **Framework Preset: Other** →
+Deploy dabao. **Kuch bhi type mat karo** Build/Output/Install me.
+
+### Raasta B — Zip se (fastest)
+
+1. `prerana-VERCEL-FLAT.zip` download karo
+2. Vercel → **Add New → Project**
+3. Neeche **"Deploy without a Git repository"** / *drag & drop* option
+4. Flat zip daalo → Deploy
+
+> ⚠️ Kaunsa zip? **`prerana-VERCEL-FLAT.zip`** — isme files root pe hain,
+> zip-drop ke liye yahi sahi hai.
+
+---
+
+## 🔍 Deploy ke baad 30-second check
+
+Browser me kholo aur ye 3 URL try karo:
+
+| URL | Aana chahiye |
+|---|---|
+| `/` | Curtain gate + countdown |
+| `/birthday.html` | Reveal page |
+| `/songs/sec-1.mp3` | Audio file (bajega/download hoga) |
+
+Teeno 200 hone chahiye. Agar `/` 404 aur `/api/time` 200 → wo **Issue #2** hai (framework preset).
+
+### Package me kya kya hai (verify)
+
+```
+index.html        ← ROOT me hona zaroori
+_patch.js
+vercel.json       ← framework: null
+_next/  ref/  fonts/  songs/  sounds/  downloads/  videos/
+birthday.html   last.html   bg2.jpg
+```
